@@ -1,3 +1,5 @@
+import 'package:ciernote/Modelo/anotacao.dart';
+import 'package:ciernote/Uteis/textos.dart';
 import 'package:flutter/material.dart';
 
 class MetodosAuxiliares{

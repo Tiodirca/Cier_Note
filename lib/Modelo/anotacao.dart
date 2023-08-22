@@ -4,7 +4,7 @@ class AnotacaoModelo {
   int id;
   String nomeAnotacao;
   String conteudoAnotacao;
-  String statusAnotacao;
+  bool statusAnotacao;
   dynamic corAnotacao;
   dynamic data;
   dynamic horario;
@@ -18,7 +18,7 @@ class AnotacaoModelo {
       required this.corAnotacao,
       required this.horario,
       required this.data,
-      this.statusAnotacao = "",
+      this.statusAnotacao = false,
       this.notificacaoAtiva = false,
       this.favorito = false});
 
@@ -27,7 +27,7 @@ class AnotacaoModelo {
       this.nomeAnotacao = "",
       this.conteudoAnotacao = "",
       this.corAnotacao,
-      this.statusAnotacao = "",
+      this.statusAnotacao = false,
       this.horario = const TimeOfDay(hour: 10, minute: 00),
       this.data = "",
       this.notificacaoAtiva = false,

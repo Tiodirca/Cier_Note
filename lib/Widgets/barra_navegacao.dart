@@ -62,7 +62,6 @@ class BarraNavegacao extends StatelessWidget {
 
   pegarValores(BuildContext context) {
     if (anotacaoModelo.corAnotacao == null) {
-      print("Vazio");
       MetodosAuxiliares.exibirMensagem(Textos.msgErroSelecaoCor, context);
     } else if (anotacaoModelo.nomeAnotacao.isEmpty ||
         anotacaoModelo.conteudoAnotacao.isEmpty) {
@@ -121,7 +120,7 @@ class BarraNavegacao extends StatelessWidget {
           botao(Icons.home_filled),
           botao(Icons.done_all),
           botaoAcao(mudarIconeBtnAcao(tipoAcao), context),
-          botao(Icons.stacked_line_chart),
+          botao(Icons.favorite_outlined),
           botao(Icons.person_outline)
         ],
       ),

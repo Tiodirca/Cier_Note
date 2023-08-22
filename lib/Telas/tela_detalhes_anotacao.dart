@@ -19,8 +19,10 @@ class TelaDetalhesAnotacao extends StatefulWidget {
 
 class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
   Estilo estilo = Estilo();
+  BancoDados bancoDados = BancoDados();
   late bool statusAnotacaoFavorito = widget.anotacaoModelo.favorito;
   late bool statusAnotacaoNotificacao = widget.anotacaoModelo.notificacaoAtiva;
+  late bool statusConclusaoAnotacao = widget.anotacaoModelo.statusAnotacao;
 
   @override
   void initState() {
@@ -43,20 +45,57 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
                   iconData == Constantes.iconNotificacaoDesativada) {
                 setState(() {
                   statusAnotacaoNotificacao = !statusAnotacaoNotificacao;
+                  verificarAtivacaoDesativacaoAcao(statusAnotacaoNotificacao,
+                      Textos.notificacaoAtivada, Textos.notificacaoDesativada);
+                  widget.anotacaoModelo.notificacaoAtiva =
+                      statusAnotacaoNotificacao;
+                  print("Anotacao");
+                  print(widget.anotacaoModelo.notificacaoAtiva);
+                  print(statusAnotacaoNotificacao);
+                  chamarAtualizarDados();
                 });
               } else if (iconData == Constantes.iconFavoritoAtivo ||
                   iconData == Constantes.iconFavoritoDesativado) {
                 setState(() {
                   statusAnotacaoFavorito = !statusAnotacaoFavorito;
+                  verificarAtivacaoDesativacaoAcao(statusAnotacaoFavorito,
+                      Textos.favoritoAtivada, Textos.favoritoDesativada);
+                  widget.anotacaoModelo.favorito = statusAnotacaoFavorito;
+                  print("Favorito");
+                  print(widget.anotacaoModelo.favorito);
+                  print(statusAnotacaoFavorito);
+                  chamarAtualizarDados();
                 });
               } else if (iconData == Constantes.iconExcluirDado) {
-                chamarExcluirDado();
+                alertaExclusao();
+              } else if (iconData == Constantes.iconConcluidoAnotacao ||
+                  iconData == Constantes.iconNaoConcluidoAnotacao) {
+                setState(() {
+                  statusConclusaoAnotacao = !statusConclusaoAnotacao;
+                  verificarAtivacaoDesativacaoAcao(statusConclusaoAnotacao,
+                      Textos.anotacaoConcluida, Textos.anotacaoNaoConcluida);
+                  widget.anotacaoModelo.statusAnotacao =
+                      statusConclusaoAnotacao;
+                  chamarAtualizarDados();
+                });
               }
             }),
       );
 
+  verificarAtivacaoDesativacaoAcao(
+      bool acao, String msgAtivo, String msgDesativado) {
+    if (acao) {
+      MetodosAuxiliares.exibirMensagem(msgAtivo, context);
+    } else {
+      MetodosAuxiliares.exibirMensagem(msgDesativado, context);
+    }
+  }
+
+  chamarAtualizarDados() async {
+    bancoDados.atualizarDados(widget.anotacaoModelo);
+  }
+
   chamarExcluirDado() async {
-    BancoDados bancoDados = BancoDados();
     bool retorno = await bancoDados.excluirDado(widget.anotacaoModelo.id);
     if (retorno) {
       MetodosAuxiliares.exibirMensagem(Textos.msgSucessoExcluir, context);
@@ -87,16 +126,69 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
                 child: TextFormField(
                   readOnly: true,
                   initialValue: conteudo,
-                  onTap: () async {
-                    if (label == Textos.labelData) {
-                    } else if (label == Textos.labelHorario) {}
-                  },
                   maxLines: label == Textos.labelConteudoAnotacao ? 13 : 1,
                   style: const TextStyle(color: Colors.white),
                 ),
               )
             ],
           ));
+
+  Future<void> alertaExclusao() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            Textos.tituloAlertaExclusao,
+            style: const TextStyle(color: Colors.black),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  Textos.descricaoAlertaExclusao,
+                  style: const TextStyle(color: Colors.black),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Wrap(
+                  children: [
+                    Text(
+                      widget.anotacaoModelo.nomeAnotacao,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Não',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Sim',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () {
+                chamarExcluirDado();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +245,11 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
+                                      botoesAcoes(
+                                          statusConclusaoAnotacao == true
+                                              ? Constantes.iconConcluidoAnotacao
+                                              : Constantes
+                                                  .iconNaoConcluidoAnotacao),
                                       botoesAcoes(statusAnotacaoFavorito == true
                                           ? Constantes.iconFavoritoAtivo
                                           : Constantes.iconFavoritoDesativado),
@@ -161,7 +258,7 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
                                               ? Constantes.iconNotificacaoAtiva
                                               : Constantes
                                                   .iconNotificacaoDesativada),
-                                      botoesAcoes(Constantes.iconExcluirDado)
+                                      botoesAcoes(Constantes.iconExcluirDado),
                                     ],
                                   ))
                             ],

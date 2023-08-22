@@ -20,6 +20,10 @@ class Constantes {
   static const iconNotificacaoAtiva = Icons.notifications;
   static const iconNotificacaoDesativada = Icons.notifications_off_outlined;
   static const iconExcluirDado = Icons.close_rounded;
+  static const iconConcluidoAnotacao = Icons.done_all;
+  static const iconNaoConcluidoAnotacao = Icons.remove_done_outlined;
+
+  static const statusAnotacaoConcluido = "concluido";
 
 
   static const bancoNomeTabela ="anotacoes";

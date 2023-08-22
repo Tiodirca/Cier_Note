@@ -49,7 +49,8 @@ class BancoDados {
       await bancoDados.insert(Constantes.bancoNomeTabela, <String, Object?>{
         Constantes.bancoNomeAnotacao: anotacaoModelo.nomeAnotacao,
         Constantes.bancoConteudoAnotacao: anotacaoModelo.conteudoAnotacao,
-        Constantes.bancoStatusAnotacao: anotacaoModelo.statusAnotacao,
+        Constantes.bancoStatusAnotacao:
+            anotacaoModelo.statusAnotacao.toString(),
         Constantes.bancoCorAnotacao: anotacaoModelo.corAnotacao.toString(),
         Constantes.bancoData: anotacaoModelo.data,
         Constantes.bancoHorario: anotacaoModelo.horario,
@@ -73,19 +74,29 @@ class BancoDados {
     List<AnotacaoModelo> listaFinal = [];
     bool favorito = false;
     bool notificacaoAtiva = false;
+    bool statusAnotacao = false;
     for (var element in lista) {
+      if (element.values.elementAt(3) == "true") {
+        statusAnotacao = true;
+      } else {
+        statusAnotacao = false;
+      }
       if (element.values.elementAt(7) == "true") {
         favorito = true;
+      } else {
+        favorito = false;
       }
       if (element.values.elementAt(8) == "true") {
         notificacaoAtiva = true;
+      } else {
+        notificacaoAtiva = false;
       }
 
       listaFinal.add(AnotacaoModelo(
           id: element.values.elementAt(0),
           nomeAnotacao: element.values.elementAt(1),
           conteudoAnotacao: element.values.elementAt(2),
-          statusAnotacao: element.values.elementAt(3),
+          statusAnotacao: statusAnotacao,
           corAnotacao: MetodosAuxiliares.recuperarCorSelecionada(
               element.values.elementAt(4)),
           data: element.values.elementAt(5),
@@ -100,6 +111,10 @@ class BancoDados {
   Future<bool> atualizarDados(AnotacaoModelo anotacaoModelo) async {
     await abirConexaoBancoDadosDesktop();
     try {
+      print("Fav Metodo");
+      print(anotacaoModelo.favorito.toString());
+      print("Not Metodo");
+      print(anotacaoModelo.notificacaoAtiva.toString());
       await bancoDados.execute('''UPDATE ${Constantes.bancoNomeTabela} SET
       ${Constantes.bancoNomeAnotacao} = '${anotacaoModelo.nomeAnotacao}',
       ${Constantes.bancoConteudoAnotacao} = '${anotacaoModelo.conteudoAnotacao}',

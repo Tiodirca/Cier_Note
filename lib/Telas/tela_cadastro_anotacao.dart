@@ -36,7 +36,12 @@ class _TelaCadastroAnotacaoState extends State<TelaCadastroAnotacao> {
   void initState() {
     super.initState();
     controllerData.text = '${data.day}/${data.month}/${data.year}';
+    BarraNavegacao.anotacaoModelo = AnotacaoModelo.vazia();
     BarraNavegacao.anotacaoModelo.id = 0;
+    BarraNavegacao.anotacaoModelo.corAnotacao = null;
+    BarraNavegacao.anotacaoModelo.favorito = false;
+    BarraNavegacao.anotacaoModelo.notificacaoAtiva = false;
+    BarraNavegacao.anotacaoModelo.statusAnotacao = false;
   }
 
   // lista com as cores para

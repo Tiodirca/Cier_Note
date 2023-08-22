@@ -69,7 +69,7 @@ class _TelaInicialState extends State<TelaInicial> {
                           width: larguraTela,
                           height: alturaTela,
                           color: Colors.green,
-                          child: Center(
+                          child: const Center(
                             child: Text("sdfsfsdfs"),
                           ),
                         );
@@ -167,12 +167,37 @@ class _TelaInicialState extends State<TelaInicial> {
                                               color: Colors.white)),
                                       Expanded(
                                           flex: 1,
-                                          child: ListView.builder(
-                                            itemCount: anotacoes.length,
-                                            itemBuilder: (context, index) {
-                                              return CardsTarefas(
-                                                  anotacaoModelo: anotacoes
-                                                      .elementAt(index));
+                                          child: LayoutBuilder(
+                                            builder: (context, constraints) {
+                                              if (anotacoes.isEmpty) {
+                                                return Center(
+                                                  child: Text(
+                                                    Textos.semAnotacoes,
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 20),
+                                                  ),
+                                                );
+                                              } else {
+                                                return ListView.builder(
+                                                  itemCount: anotacoes.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    print(anotacoes
+                                                        .elementAt(index).notificacaoAtiva
+                                                        .toString());
+                                                    print("fdsfsd");
+                                                    print(anotacoes.elementAt(index).id);
+                                                    print(anotacoes
+                                                        .elementAt(index).favorito
+                                                        .toString());
+                                                    return CardsTarefas(
+                                                        anotacaoModelo:
+                                                            anotacoes.elementAt(
+                                                                index));
+                                                  },
+                                                );
+                                              }
                                             },
                                           ))
                                     ],
