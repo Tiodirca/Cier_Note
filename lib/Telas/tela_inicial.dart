@@ -17,6 +17,9 @@ class TelaInicial extends StatefulWidget {
 
 class _TelaInicialState extends State<TelaInicial> {
   List<AnotacaoModelo> anotacoes = [];
+  List<AnotacaoModelo> anotacoesFiltragemBusca = [];
+  TextEditingController controllerFiltrarBuscaAnotacoes =
+      TextEditingController(text: "");
   Estilo estilo = Estilo();
   bool telaCarregamento = true;
 
@@ -24,15 +27,15 @@ class _TelaInicialState extends State<TelaInicial> {
   void initState() {
     super.initState();
     chamarCriarTabela();
-    chamarRealizarConsulta();
+    chamarRealizarConsultaBancoDados();
   }
 
   chamarCriarTabela() async {
     BancoDados bancoDados = BancoDados();
-    bool retorno = await bancoDados.criarTabela();
+    await bancoDados.criarTabela();
   }
 
-  chamarRealizarConsulta() async {
+  chamarRealizarConsultaBancoDados() async {
     BancoDados bancoDados = BancoDados();
     await bancoDados.recuperarDadosBanco().then(
       (value) {
@@ -42,6 +45,22 @@ class _TelaInicialState extends State<TelaInicial> {
         anotacoes = value;
       },
     );
+  }
+
+  realizarFiltragemBuscaAnotacoes() {
+    anotacoesFiltragemBusca.clear();
+    setState(() {
+      for (var element in anotacoes) {
+        if (element.nomeAnotacao
+            .contains(controllerFiltrarBuscaAnotacoes.text)) {
+          print("fdsfsf");
+          anotacoesFiltragemBusca.add(element);
+        }
+      }
+      for (var element in anotacoesFiltragemBusca) {
+        print("el${element.nomeAnotacao},${element.conteudoAnotacao}");
+      }
+    });
   }
 
   @override
@@ -106,6 +125,8 @@ class _TelaInicialState extends State<TelaInicial> {
                                                             height: 50,
                                                             child:
                                                                 TextFormField(
+                                                              controller:
+                                                                  controllerFiltrarBuscaAnotacoes,
                                                               style: const TextStyle(
                                                                   color: Colors
                                                                       .white),
@@ -116,23 +137,49 @@ class _TelaInicialState extends State<TelaInicial> {
                                                             width: 50,
                                                             child:
                                                                 FloatingActionButton(
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            20),
-                                                              ),
-                                                              backgroundColor:
-                                                                  PaletaCores
-                                                                      .corVerdeClaro,
-                                                              onPressed: () {},
-                                                              child: Icon(
-                                                                  Icons.search,
-                                                                  color: PaletaCores
-                                                                      .corAzul,
-                                                                  size: 30),
-                                                            ),
+                                                                    shape:
+                                                                        RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              20),
+                                                                    ),
+                                                                    backgroundColor: anotacoesFiltragemBusca.isNotEmpty
+                                                                        ? Colors
+                                                                            .redAccent
+                                                                        : PaletaCores
+                                                                            .corVerdeClaro,
+                                                                    onPressed:
+                                                                        () {
+                                                                      if (anotacoesFiltragemBusca
+                                                                          .isNotEmpty) {
+                                                                        setState(
+                                                                            () {
+                                                                          anotacoesFiltragemBusca
+                                                                              .clear();
+                                                                        });
+                                                                      } else {
+                                                                        realizarFiltragemBuscaAnotacoes();
+                                                                      }
+                                                                    },
+                                                                    child:
+                                                                        LayoutBuilder(
+                                                                      builder:
+                                                                          (context,
+                                                                              constraints) {
+                                                                        if (anotacoesFiltragemBusca
+                                                                            .isNotEmpty) {
+                                                                          return Icon(
+                                                                              Icons.close,
+                                                                              color: PaletaCores.corAzul,
+                                                                              size: 30);
+                                                                        } else {
+                                                                          return Icon(
+                                                                              Icons.search,
+                                                                              color: PaletaCores.corAzul,
+                                                                              size: 30);
+                                                                        }
+                                                                      },
+                                                                    )),
                                                           )
                                                         ],
                                                       ),
@@ -178,19 +225,26 @@ class _TelaInicialState extends State<TelaInicial> {
                                                         fontSize: 20),
                                                   ),
                                                 );
+                                              } else if (anotacoesFiltragemBusca
+                                                  .isNotEmpty) {
+                                                return ListView.builder(
+                                                  itemCount:
+                                                      anotacoesFiltragemBusca
+                                                          .length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return CardsTarefas(
+                                                        anotacaoModelo:
+                                                            anotacoesFiltragemBusca
+                                                                .elementAt(
+                                                                    index));
+                                                  },
+                                                );
                                               } else {
                                                 return ListView.builder(
                                                   itemCount: anotacoes.length,
                                                   itemBuilder:
                                                       (context, index) {
-                                                    print(anotacoes
-                                                        .elementAt(index).notificacaoAtiva
-                                                        .toString());
-                                                    print("fdsfsd");
-                                                    print(anotacoes.elementAt(index).id);
-                                                    print(anotacoes
-                                                        .elementAt(index).favorito
-                                                        .toString());
                                                     return CardsTarefas(
                                                         anotacaoModelo:
                                                             anotacoes.elementAt(
