@@ -44,20 +44,6 @@ class _TelaCadastroAnotacaoState extends State<TelaCadastroAnotacao> {
     BarraNavegacao.anotacaoModelo.statusAnotacao = false;
   }
 
-  // lista com as cores para
-  // o usuario selecionar
-  final List<SeletorCorModelo> itensCores = [
-    SeletorCorModelo(cor: PaletaCores.corCastanho),
-    SeletorCorModelo(cor: PaletaCores.corVerdeClaro),
-    SeletorCorModelo(cor: PaletaCores.corAzulCianoClaro),
-    SeletorCorModelo(cor: PaletaCores.corRosa),
-    SeletorCorModelo(cor: PaletaCores.corVerdeCiano),
-    SeletorCorModelo(cor: PaletaCores.corMarsala),
-    SeletorCorModelo(cor: PaletaCores.corAmareloDesaturado),
-    SeletorCorModelo(cor: PaletaCores.corLaranja),
-    SeletorCorModelo(cor: PaletaCores.corVerdeLima),
-  ];
-
   Widget camposCadastro(
           double larguraTela, TextEditingController controller, String label) =>
       Container(
@@ -209,7 +195,7 @@ class _TelaCadastroAnotacaoState extends State<TelaCadastroAnotacao> {
                     // setando novo valor para tal
                     // parametro permitindo assim
                     // evidenciar somente uma cor selecionada
-                    for (var itemLista in itensCores) {
+                    for (var itemLista in Constantes.itensCores) {
                       itemLista.corMarcada = false;
                     }
                   });
@@ -285,7 +271,7 @@ class _TelaCadastroAnotacaoState extends State<TelaCadastroAnotacao> {
                                   child: ListView(
                                     scrollDirection: Axis.horizontal,
                                     children: [
-                                      ...itensCores
+                                      ...Constantes.itensCores
                                           .map((e) => seletorCor(e))
                                           .toList()
                                     ],

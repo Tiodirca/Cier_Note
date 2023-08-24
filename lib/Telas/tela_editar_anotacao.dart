@@ -68,7 +68,7 @@ class _TelaEditarAnotacaoState extends State<TelaEditarAnotacao> {
   recuperarCorSelecionada() {
     // verificando qual item da lista de cores corresponde
     // a cor recuperada para marcar no seletor
-    for (var linha in itensCores) {
+    for (var linha in Constantes.itensCores) {
       if (linha.cor == widget.anotacaoModelo.corAnotacao) {
         linha.corMarcada = true;
         corSelecionada = linha.cor;
@@ -76,18 +76,7 @@ class _TelaEditarAnotacaoState extends State<TelaEditarAnotacao> {
     }
   }
 
-  // lista com as cores para o usuario selecionar
-  final List<SeletorCorModelo> itensCores = [
-    SeletorCorModelo(cor: PaletaCores.corCastanho),
-    SeletorCorModelo(cor: PaletaCores.corVerdeClaro),
-    SeletorCorModelo(cor: PaletaCores.corAzulCianoClaro),
-    SeletorCorModelo(cor: PaletaCores.corRosa),
-    SeletorCorModelo(cor: PaletaCores.corVerdeCiano),
-    SeletorCorModelo(cor: PaletaCores.corMarsala),
-    SeletorCorModelo(cor: PaletaCores.corAmareloDesaturado),
-    SeletorCorModelo(cor: PaletaCores.corLaranja),
-    SeletorCorModelo(cor: PaletaCores.corVerdeLima),
-  ];
+
 
   Widget camposCadastro(
           double larguraTela, TextEditingController controller, String label) =>
@@ -232,7 +221,7 @@ class _TelaEditarAnotacaoState extends State<TelaEditarAnotacao> {
                     // setando novo valor para tal
                     // parametro permitindo assim
                     // evidenciar somente uma cor selecionada
-                    for (var itemLista in itensCores) {
+                    for (var itemLista in Constantes.itensCores) {
                       itemLista.corMarcada = false;
                     }
                   });
@@ -302,7 +291,7 @@ class _TelaEditarAnotacaoState extends State<TelaEditarAnotacao> {
                                 child: ListView(
                                   scrollDirection: Axis.horizontal,
                                   children: [
-                                    ...itensCores
+                                    ...Constantes.itensCores
                                         .map((e) => seletorCor(e))
                                         .toList()
                                   ],
