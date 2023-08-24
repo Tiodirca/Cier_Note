@@ -30,11 +30,15 @@ class _TelaInicialState extends State<TelaInicial> {
     chamarRealizarConsultaBancoDados();
   }
 
+  // metodo para criar tabela caso
+  // ela não tenha sido criada ainda
   chamarCriarTabela() async {
     BancoDados bancoDados = BancoDados();
     await bancoDados.criarTabela();
   }
 
+  // metodo para realizar a busca das anotacoes
+  // no banco de dados
   chamarRealizarConsultaBancoDados() async {
     BancoDados bancoDados = BancoDados();
     await bancoDados.recuperarDadosBanco().then(
@@ -47,18 +51,21 @@ class _TelaInicialState extends State<TelaInicial> {
     );
   }
 
+  // metodo para realizar a busca de anotacoes
+  // na listagem principal
   realizarFiltragemBuscaAnotacoes() {
+    // linpando a lista antes de fazer uma nova busca
     anotacoesFiltragemBusca.clear();
     setState(() {
+      // percorrendo a lista
       for (var element in anotacoes) {
+        //verificando se existe algum elemento que contenha a
+        // string digitada pelo usuario e passando tudo para minusculo
         if (element.nomeAnotacao
-            .contains(controllerFiltrarBuscaAnotacoes.text)) {
-          print("fdsfsf");
+            .toLowerCase()
+            .contains(controllerFiltrarBuscaAnotacoes.text.toLowerCase())) {
           anotacoesFiltragemBusca.add(element);
         }
-      }
-      for (var element in anotacoesFiltragemBusca) {
-        print("el${element.nomeAnotacao},${element.conteudoAnotacao}");
       }
     });
   }
@@ -125,6 +132,18 @@ class _TelaInicialState extends State<TelaInicial> {
                                                             height: 50,
                                                             child:
                                                                 TextFormField(
+                                                              onChanged:
+                                                                  (value) {
+                                                                realizarFiltragemBuscaAnotacoes();
+                                                                if (controllerFiltrarBuscaAnotacoes
+                                                                    .text
+                                                                    .isEmpty) {
+                                                                  setState(() {
+                                                                    anotacoesFiltragemBusca
+                                                                        .clear();
+                                                                  });
+                                                                }
+                                                              },
                                                               controller:
                                                                   controllerFiltrarBuscaAnotacoes,
                                                               style: const TextStyle(
@@ -155,6 +174,8 @@ class _TelaInicialState extends State<TelaInicial> {
                                                                         setState(
                                                                             () {
                                                                           anotacoesFiltragemBusca
+                                                                              .clear();
+                                                                          controllerFiltrarBuscaAnotacoes
                                                                               .clear();
                                                                         });
                                                                       } else {
