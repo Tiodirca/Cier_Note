@@ -7,6 +7,7 @@ import 'package:ciernote/Uteis/textos.dart';
 import 'package:ciernote/Widgets/barra_navegacao.dart';
 import 'package:ciernote/Widgets/cards_tarefas_simples.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
@@ -45,8 +46,12 @@ class _TelaInicialState extends State<TelaInicial> {
       (value) {
         setState(() {
           telaCarregamento = false;
+          anotacoes = value;
+          anotacoes.sort((a, b) => DateFormat("dd/MM/yyyy", "pt_BR")
+              .parse(b.data)
+              .compareTo(DateFormat("dd/MM/yyyy", "pt_BR").parse(a.data)));
         });
-        anotacoes = value;
+
       },
     );
   }
