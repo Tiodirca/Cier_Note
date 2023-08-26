@@ -1,6 +1,6 @@
-import 'package:ciernote/Controle/Consultas.dart';
+import 'package:ciernote/Uteis/consultas.dart';
 import 'package:ciernote/Modelo/anotacao.dart';
-import 'package:ciernote/Uteis/BancoDados/BancoDados.dart';
+import 'package:ciernote/Uteis/BancoDados/banco_dados.dart';
 import 'package:ciernote/Uteis/constantes.dart';
 import 'package:ciernote/Uteis/estilo.dart';
 import 'package:ciernote/Uteis/paleta_cores.dart';
@@ -46,6 +46,7 @@ class _TelaAnotacoesConcluidasState extends State<TelaAnotacoesConcluidas> {
     anotacoes = await Consultas.realizarConsultaBancoDados();
     if (anotacoes.isNotEmpty) {
       setState(() {
+        // removendo objeto da lista quando ele nao atender ao parametro passado
         anotacoes.removeWhere((element) => element.statusAnotacao != true);
         telaCarregamento = false;
       });
@@ -59,7 +60,8 @@ class _TelaAnotacoesConcluidasState extends State<TelaAnotacoesConcluidas> {
   // metodo para realizar a busca de anotacoes
   // na listagem principal
   realizarFiltragemBuscaAnotacoes() {
-    // linpando a lista antes de fazer uma nova busca
+    //limpando a lista antes
+    // de fazer uma nova busca
     anotacoesFiltragemBusca.clear();
     setState(() {
       // percorrendo a lista

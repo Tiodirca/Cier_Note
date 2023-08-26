@@ -1,6 +1,6 @@
 import 'package:ciernote/Modelo/anotacao.dart';
-import 'package:ciernote/Uteis/BancoDados/BancoDados.dart';
-import 'package:ciernote/Uteis/MetodosAuxiliares.dart';
+import 'package:ciernote/Uteis/BancoDados/banco_dados.dart';
+import 'package:ciernote/Uteis/metodos_auxiliares.dart';
 import 'package:ciernote/Uteis/constantes.dart';
 import 'package:ciernote/Uteis/paleta_cores.dart';
 import 'package:ciernote/Uteis/textos.dart';

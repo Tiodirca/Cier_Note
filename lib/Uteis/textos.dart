@@ -1,9 +1,12 @@
 class Textos {
+  // strings gerais
   static String nomeApp = "Cier Note";
+  static String txtTelaCarregamento = "Carregando Aguarde";
+  static String legendaTarefasAndamento = "Tarefas em andamento";
 
+  // botoes
   static String btnFavoritos = "Favoritos";
   static String btnNotificacoes = "Notificações";
-  static String txtTelaCarregamento = "Carregando Aguarde";
 
   // titulos Telas
   static String telaCadastroAnotacao = "Cadastro de tarefa";
@@ -11,7 +14,7 @@ class Textos {
   static String telaEditarAnotacao = "Editar anotação";
   static String telaFavoritos = "Favoritos e Notificações";
   static String telaAnotacoesConcluidas = "Concluidas";
-
+  //descritivo telas
   static String descricaoTelaAnotacoesConcluidas =
       "Abaixo você pode ver todas as anotações que você já concluiu";
   static String descricaoTelaFavoritoNotificacao =
@@ -29,9 +32,6 @@ class Textos {
   static String tituloAlertaExclusao = "Confirmação de exclusão";
   static String descricaoAlertaExclusao =
       "Deseja realmente excluir está anotação ?";
-
-  // strings gerais
-  static String legendaTarefasAndamento = "Tarefas em andamento";
 
   //mensagem de retorno caso nao defina um horario
   static String semHorarioDefinido = "Sem Horário definido";

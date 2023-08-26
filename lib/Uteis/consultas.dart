@@ -1,9 +1,11 @@
 import 'package:ciernote/Modelo/anotacao.dart';
-import 'package:ciernote/Uteis/BancoDados/BancoDados.dart';
+import 'package:ciernote/Uteis/BancoDados/banco_dados.dart';
 import 'package:intl/intl.dart';
 
 class Consultas {
-  static Future<List<AnotacaoModelo>>realizarConsultaBancoDados() async {
+  //   //Future para realizar consulta ao banco de dados
+  // e retornar uma lista com estes dados
+  static Future<List<AnotacaoModelo>> realizarConsultaBancoDados() async {
     List<AnotacaoModelo> anotacoes = [];
     BancoDados bancoDados = BancoDados();
     await bancoDados.recuperarDadosBanco().then(

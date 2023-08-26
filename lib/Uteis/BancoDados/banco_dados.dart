@@ -1,5 +1,5 @@
 import 'package:ciernote/Modelo/anotacao.dart';
-import 'package:ciernote/Uteis/MetodosAuxiliares.dart';
+import 'package:ciernote/Uteis/metodos_auxiliares.dart';
 import 'package:ciernote/Uteis/constantes.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -58,10 +58,8 @@ class BancoDados {
         Constantes.bancoNotificacaoAtiva:
             anotacaoModelo.notificacaoAtiva.toString(),
       });
-      print("fdsfsdf");
       return true;
     } catch (e) {
-      print(e.toString());
       return false;
     }
   }
@@ -111,10 +109,6 @@ class BancoDados {
   Future<bool> atualizarDados(AnotacaoModelo anotacaoModelo) async {
     await abirConexaoBancoDadosDesktop();
     try {
-      print("Fav Metodo");
-      print(anotacaoModelo.favorito.toString());
-      print("Not Metodo");
-      print(anotacaoModelo.notificacaoAtiva.toString());
       await bancoDados.execute('''UPDATE ${Constantes.bancoNomeTabela} SET
       ${Constantes.bancoNomeAnotacao} = '${anotacaoModelo.nomeAnotacao}',
       ${Constantes.bancoConteudoAnotacao} = '${anotacaoModelo.conteudoAnotacao}',
@@ -126,7 +120,6 @@ class BancoDados {
       ${Constantes.bancoNotificacaoAtiva} = '${anotacaoModelo.notificacaoAtiva}'WHERE id = ${anotacaoModelo.id}''');
       return true;
     } catch (e) {
-      print(e.toString());
       return false;
     }
   }
@@ -139,7 +132,6 @@ class BancoDados {
           '''DELETE FROM ${Constantes.bancoNomeTabela} WHERE id = $id''');
       return true;
     } catch (e) {
-      print(e.toString());
       return false;
     }
   }

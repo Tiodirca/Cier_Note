@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate
       ],
-      //setando o suporte da lingua usada no data picker
+      //setando o suporte da
+      // lingua usada no data picker
       supportedLocales: const [Locale('pt', 'BR')],
       debugShowCheckedModeBanner: false,
       initialRoute: Constantes.rotaTelaInicial,

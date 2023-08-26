@@ -8,7 +8,7 @@ import 'package:ciernote/Widgets/listagem_anotacoes.dart';
 import 'package:ciernote/Widgets/tela_carregamento.dart';
 import 'package:flutter/material.dart';
 
-import '../Controle/Consultas.dart';
+import '../Uteis/consultas.dart';
 
 class TelaFavoritoNotificacao extends StatefulWidget {
   const TelaFavoritoNotificacao({super.key});
@@ -38,7 +38,8 @@ class _TelaFavoritoNotificacaoState extends State<TelaFavoritoNotificacao> {
     anotacoesFiltragemNotificacao.clear();
   }
 
-  // metodo para realizar a busca das anotacoes
+  // metodo para realizar
+  // a busca das anotacoes
   // no banco de dados
   chamarRealizarConsultaBancoDados() async {
     anotacoes = await Consultas.realizarConsultaBancoDados();

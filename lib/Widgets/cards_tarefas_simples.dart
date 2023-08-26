@@ -10,7 +10,7 @@ class CardsTarefas extends StatelessWidget {
   final AnotacaoModelo anotacaoModelo;
   final tipoTela;
 
-  Widget informarcoesRodape(IconData icons, String legenda) => Row(
+  Widget informacoesRodape(IconData icons, String legenda) => Row(
         children: [
           Icon(
             icons,
@@ -95,18 +95,18 @@ class CardsTarefas extends StatelessWidget {
                       children: [
                         SizedBox(
                           width: 200,
-                          child: informarcoesRodape(Icons.access_time_outlined,
+                          child: informacoesRodape(Icons.access_time_outlined,
                               anotacaoModelo.horario.toString()),
                         ),
                         SizedBox(
                           width: 100,
-                          child: informarcoesRodape(Icons.date_range_outlined,
+                          child: informacoesRodape(Icons.date_range_outlined,
                               anotacaoModelo.data.toString()),
                         ),
                         LayoutBuilder(
                           builder: (context, constraints) {
                             if (anotacaoModelo.favorito) {
-                              return informarcoesRodape(
+                              return informacoesRodape(
                                   Constantes.iconFavoritoAtivo, "");
                             } else {
                               return Container(width: 20);
@@ -116,7 +116,7 @@ class CardsTarefas extends StatelessWidget {
                         LayoutBuilder(
                           builder: (context, constraints) {
                             if (anotacaoModelo.notificacaoAtiva) {
-                              return informarcoesRodape(
+                              return informacoesRodape(
                                   Constantes.iconNotificacaoAtiva, "");
                             } else {
                               return Container(width: 20);
