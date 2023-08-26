@@ -9,9 +9,11 @@ import 'package:ciernote/Widgets/barra_navegacao.dart';
 import 'package:flutter/material.dart';
 
 class TelaDetalhesAnotacao extends StatefulWidget {
-  const TelaDetalhesAnotacao({super.key, required this.anotacaoModelo});
+  const TelaDetalhesAnotacao(
+      {super.key, required this.anotacaoModelo, required this.tipoTela});
 
   final AnotacaoModelo anotacaoModelo;
+  final tipoTela;
 
   @override
   State<TelaDetalhesAnotacao> createState() => _TelaDetalhesAnotacaoState();
@@ -190,6 +192,21 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
     );
   }
 
+  redirecionamentoTela(){
+    if (widget.tipoTela == Constantes.rotaTelaInicial) {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaInicial);
+    } else if (widget.tipoTela ==
+        Constantes.rotaTelaFavorito) {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaFavorito);
+    } else if (widget.tipoTela ==
+        Constantes.rotaTelaAnotacoesConcluidas) {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaAnotacoesConcluidas);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;
@@ -205,8 +222,7 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
                   ),
                   leading: IconButton(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, Constantes.rotaTelaInicial);
+                      redirecionamentoTela();
                     },
                     icon: const Icon(
                       Icons.arrow_back_ios,
@@ -283,7 +299,7 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
                     ],
                   ))),
           onWillPop: () async {
-            Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+            redirecionamentoTela();
             return false;
           },
         ));
