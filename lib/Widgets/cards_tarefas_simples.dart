@@ -4,9 +4,11 @@ import 'package:ciernote/Uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
 
 class CardsTarefas extends StatelessWidget {
-  const CardsTarefas({super.key, required this.anotacaoModelo});
+  const CardsTarefas(
+      {super.key, required this.anotacaoModelo, required this.tipoTela});
 
   final AnotacaoModelo anotacaoModelo;
+  final tipoTela;
 
   Widget informarcoesRodape(IconData icons, String legenda) => Row(
         children: [
@@ -41,6 +43,7 @@ class CardsTarefas extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20))),
         onPressed: () {
           Map dados = {};
+          dados[Constantes.parametroTipoTela] = tipoTela;
           dados[Constantes.parametroTelaDetalhesAnotacao] = anotacaoModelo;
           Navigator.pushReplacementNamed(
               context, Constantes.rotaTelaDetalhesAnotacao,
@@ -90,16 +93,23 @@ class CardsTarefas extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        informarcoesRodape(Icons.access_time_outlined,
-                            anotacaoModelo.horario.toString()),
-                        informarcoesRodape(Icons.date_range_outlined,
-                            anotacaoModelo.data.toString()),
+                        SizedBox(
+                          width: 200,
+                          child: informarcoesRodape(Icons.access_time_outlined,
+                              anotacaoModelo.horario.toString()),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: informarcoesRodape(Icons.date_range_outlined,
+                              anotacaoModelo.data.toString()),
+                        ),
                         LayoutBuilder(
                           builder: (context, constraints) {
                             if (anotacaoModelo.favorito) {
-                              return informarcoesRodape(Constantes.iconFavoritoAtivo, "");
+                              return informarcoesRodape(
+                                  Constantes.iconFavoritoAtivo, "");
                             } else {
-                              return Container();
+                              return Container(width: 20);
                             }
                           },
                         ),
@@ -109,7 +119,7 @@ class CardsTarefas extends StatelessWidget {
                               return informarcoesRodape(
                                   Constantes.iconNotificacaoAtiva, "");
                             } else {
-                              return Container();
+                              return Container(width: 20);
                             }
                           },
                         )

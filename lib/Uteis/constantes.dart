@@ -3,19 +3,29 @@ import 'package:ciernote/Uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
 
 class Constantes {
+  // cor do plano de fundo das telas
+  static Color corFundoTela = PaletaCores.corAzul;
+
+  // rota
   static const rotaTelaInicial = "telaInicial";
   static const rotaTelaCadastroAnotacao = "telaCadastroAnotacao";
   static const rotaTelaDetalhesAnotacao = "telaDetalhesAnotacao";
   static const rotaTelaEditarAnotacao = "telaEditarAnotacao";
+  static const rotaTelaFavorito = "telaFavorito";
+  static const rotaTelaAnotacoesConcluidas = "telaAnotacoesConcluidas";
 
+  // parametro para passar map de dados para tela de detalhes
   static const parametroTelaDetalhesAnotacao = "parametroDetalhesAnotacao";
+  static const parametroTipoTela = "tipoTela";
 
+  // acoes dos botoes
   static const tipoAcaoAdicao = "adicionarAnotacao";
   static const tipoAcaoSalvarAnotacao = "salvarAnotacao";
   static const tipoAcaoEditarAnotacao = "editarAnotacao";
+  static const tipoAcaoFiltrarFavoritoNotificacao =
+      "filtrarFavoritoNotificacao";
 
-  static Color corFundoTela = PaletaCores.corAzul;
-
+  //icones dos botoes
   static const iconFavoritoAtivo = Icons.favorite;
   static const iconFavoritoDesativado = Icons.favorite_outline;
   static const iconNotificacaoAtiva = Icons.notifications;
@@ -24,10 +34,11 @@ class Constantes {
   static const iconConcluidoAnotacao = Icons.done_all;
   static const iconNaoConcluidoAnotacao = Icons.remove_done_outlined;
 
+  // status da anotacao
   static const statusAnotacaoConcluido = "concluido";
 
-
-  static const bancoNomeTabela ="anotacoes";
+  // campos do banco de dados
+  static const bancoNomeTabela = "anotacoes";
   static const bancoID = "id";
   static const bancoNomeAnotacao = "nomeAnotacao";
   static const bancoConteudoAnotacao = "conteudoAnotacao";
@@ -51,5 +62,4 @@ class Constantes {
     SeletorCorModelo(cor: PaletaCores.corVerdeEscuro),
     SeletorCorModelo(cor: PaletaCores.corVerdeLima),
   ];
-
 }

@@ -18,7 +18,8 @@ class BarraNavegacao extends StatelessWidget {
 
   static AnotacaoModelo anotacaoModelo = AnotacaoModelo.vazia();
 
-  Widget botao(IconData iconData) => SizedBox(
+  Widget botao(IconData iconData, String tipoAcao, BuildContext context) =>
+      SizedBox(
         height: 50,
         width: 50,
         child: FloatingActionButton(
@@ -27,10 +28,36 @@ class BarraNavegacao extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             backgroundColor: PaletaCores.corVerdeClaro,
-            child: Center(
-              child: Icon(iconData, size: 30, color: PaletaCores.corAzul),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                if (tipoAcao == Constantes.tipoAcaoFiltrarFavoritoNotificacao) {
+                  return Center(
+                      child: Row(
+                    children: [
+                      Icon(Icons.favorite_outlined,
+                          size: 25, color: PaletaCores.corAzul),
+                      Icon(Icons.notifications,
+                          size: 25, color: PaletaCores.corAzul),
+                    ],
+                  ));
+                } else {
+                  return Center(
+                    child: Icon(iconData, size: 30, color: PaletaCores.corAzul),
+                  );
+                }
+              },
             ),
-            onPressed: () {}),
+            onPressed: () {
+              if (tipoAcao == Constantes.rotaTelaInicial) {
+                Navigator.popAndPushNamed(context, Constantes.rotaTelaInicial);
+              } else if (tipoAcao ==
+                  Constantes.tipoAcaoFiltrarFavoritoNotificacao) {
+                Navigator.popAndPushNamed(context, Constantes.rotaTelaFavorito);
+              } else if (tipoAcao == Constantes.rotaTelaAnotacoesConcluidas) {
+                Navigator.popAndPushNamed(
+                    context, Constantes.rotaTelaAnotacoesConcluidas);
+              }
+            }),
       );
 
   Widget botaoAcao(IconData iconData, BuildContext context) => SizedBox(
@@ -75,6 +102,7 @@ class BarraNavegacao extends StatelessWidget {
     }
   }
 
+//metodo para atualizar dados ao banco de dados
   chamarAtualizarDados(BuildContext context) async {
     BancoDados bancoDados = BancoDados();
     bool retorno = await bancoDados.atualizarDados(anotacaoModelo);
@@ -86,6 +114,7 @@ class BarraNavegacao extends StatelessWidget {
     }
   }
 
+  //metodo para adicionar dados ao banco de dados
   chamarAdicionarDados(BuildContext context) async {
     BancoDados bancoDados = BancoDados();
     bool retorno = await bancoDados.inserirDados(anotacaoModelo);
@@ -97,6 +126,7 @@ class BarraNavegacao extends StatelessWidget {
     }
   }
 
+  //metodo para mudar icone do botao central de acao
   mudarIconeBtnAcao(String tipoAcao) {
     if (tipoAcao == Constantes.tipoAcaoAdicao) {
       return Icons.add;
@@ -117,11 +147,13 @@ class BarraNavegacao extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          botao(Icons.home_filled),
-          botao(Icons.done_all),
+          botao(Icons.home_filled, Constantes.rotaTelaInicial, context),
+          botao(
+              Icons.done_all, Constantes.rotaTelaAnotacoesConcluidas, context),
           botaoAcao(mudarIconeBtnAcao(tipoAcao), context),
-          botao(Icons.favorite_outlined),
-          botao(Icons.person_outline)
+          botao(Icons.favorite_outlined,
+              Constantes.tipoAcaoFiltrarFavoritoNotificacao, context),
+          botao(Icons.person_outline, "", context)
         ],
       ),
     );

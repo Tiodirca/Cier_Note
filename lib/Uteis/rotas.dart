@@ -1,6 +1,8 @@
+import 'package:ciernote/Telas/tela_anotacoes_concluidas.dart';
 import 'package:ciernote/Telas/tela_cadastro_anotacao.dart';
 import 'package:ciernote/Telas/tela_detalhes_anotacao.dart';
 import 'package:ciernote/Telas/tela_editar_anotacao.dart';
+import 'package:ciernote/Telas/tela_favoritoNotificacao.dart';
 import 'package:ciernote/Telas/tela_inicial.dart';
 import 'package:ciernote/Uteis/constantes.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +16,17 @@ class Rotas {
         return MaterialPageRoute(builder: (_) => const TelaInicial());
       case Constantes.rotaTelaCadastroAnotacao:
         return MaterialPageRoute(builder: (_) => const TelaCadastroAnotacao());
+      case Constantes.rotaTelaFavorito:
+        return MaterialPageRoute(
+            builder: (_) => const TelaFavoritoNotificacao());
+      case Constantes.rotaTelaAnotacoesConcluidas:
+        return MaterialPageRoute(
+            builder: (_) => const TelaAnotacoesConcluidas());
       case Constantes.rotaTelaDetalhesAnotacao:
         if (argumentos is Map) {
           return MaterialPageRoute(
               builder: (_) => TelaDetalhesAnotacao(
+                  tipoTela: argumentos[Constantes.parametroTipoTela],
                   anotacaoModelo:
                       argumentos[Constantes.parametroTelaDetalhesAnotacao]));
         } else {
@@ -28,11 +37,11 @@ class Rotas {
           return MaterialPageRoute(
               builder: (_) => TelaEditarAnotacao(
                   anotacaoModelo:
-                  argumentos[Constantes.parametroTelaDetalhesAnotacao]));
+                      argumentos[Constantes.parametroTelaDetalhesAnotacao]));
         } else {
           return erroRota(settings);
         }
-      }
+    }
 
     return erroRota(settings);
   }

@@ -1,3 +1,4 @@
+import 'package:ciernote/Controle/Consultas.dart';
 import 'package:ciernote/Modelo/anotacao.dart';
 import 'package:ciernote/Uteis/BancoDados/BancoDados.dart';
 import 'package:ciernote/Uteis/constantes.dart';
@@ -5,9 +6,9 @@ import 'package:ciernote/Uteis/estilo.dart';
 import 'package:ciernote/Uteis/paleta_cores.dart';
 import 'package:ciernote/Uteis/textos.dart';
 import 'package:ciernote/Widgets/barra_navegacao.dart';
-import 'package:ciernote/Widgets/cards_tarefas_simples.dart';
+import 'package:ciernote/Widgets/listagem_anotacoes.dart';
+import 'package:ciernote/Widgets/tela_carregamento.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
@@ -18,11 +19,12 @@ class TelaInicial extends StatefulWidget {
 
 class _TelaInicialState extends State<TelaInicial> {
   List<AnotacaoModelo> anotacoes = [];
-  List<AnotacaoModelo> anotacoesFiltragemBusca = [];
+  static List<AnotacaoModelo> anotacoesFiltragemBusca = [];
   TextEditingController controllerFiltrarBuscaAnotacoes =
       TextEditingController(text: "");
   Estilo estilo = Estilo();
   bool telaCarregamento = true;
+  String tipoTela = Constantes.rotaTelaInicial;
 
   @override
   void initState() {
@@ -41,19 +43,11 @@ class _TelaInicialState extends State<TelaInicial> {
   // metodo para realizar a busca das anotacoes
   // no banco de dados
   chamarRealizarConsultaBancoDados() async {
-    BancoDados bancoDados = BancoDados();
-    await bancoDados.recuperarDadosBanco().then(
-      (value) {
-        setState(() {
-          telaCarregamento = false;
-          anotacoes = value;
-          anotacoes.sort((a, b) => DateFormat("dd/MM/yyyy", "pt_BR")
-              .parse(b.data)
-              .compareTo(DateFormat("dd/MM/yyyy", "pt_BR").parse(a.data)));
-        });
-
-      },
-    );
+    anotacoes = await Consultas.realizarConsultaBancoDados();
+    setState(() {
+      anotacoes.removeWhere((element) => element.statusAnotacao == true);
+      telaCarregamento = false;
+    });
   }
 
   // metodo para realizar a busca de anotacoes
@@ -96,14 +90,7 @@ class _TelaInicialState extends State<TelaInicial> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       if (telaCarregamento) {
-                        return Container(
-                          width: larguraTela,
-                          height: alturaTela,
-                          color: Colors.green,
-                          child: const Center(
-                            child: Text("sdfsfsdfs"),
-                          ),
-                        );
+                        return const TelaCarregamento();
                       } else {
                         return Column(
                           children: [
@@ -246,6 +233,7 @@ class _TelaInicialState extends State<TelaInicial> {
                                                 return Center(
                                                   child: Text(
                                                     Textos.semAnotacoes,
+                                                    textAlign: TextAlign.center,
                                                     style: const TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 20),
@@ -253,30 +241,14 @@ class _TelaInicialState extends State<TelaInicial> {
                                                 );
                                               } else if (anotacoesFiltragemBusca
                                                   .isNotEmpty) {
-                                                return ListView.builder(
-                                                  itemCount:
-                                                      anotacoesFiltragemBusca
-                                                          .length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return CardsTarefas(
-                                                        anotacaoModelo:
-                                                            anotacoesFiltragemBusca
-                                                                .elementAt(
-                                                                    index));
-                                                  },
-                                                );
+                                                return ListagemAnotacoes(
+                                                    anotacoes:
+                                                        anotacoesFiltragemBusca,
+                                                    tipoTela: tipoTela);
                                               } else {
-                                                return ListView.builder(
-                                                  itemCount: anotacoes.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return CardsTarefas(
-                                                        anotacaoModelo:
-                                                            anotacoes.elementAt(
-                                                                index));
-                                                  },
-                                                );
+                                                return ListagemAnotacoes(
+                                                    anotacoes: anotacoes,
+                                                    tipoTela: tipoTela);
                                               }
                                             },
                                           ))
@@ -292,20 +264,32 @@ class _TelaInicialState extends State<TelaInicial> {
                 FocusScope.of(context).requestFocus(FocusNode());
               },
             ),
-            bottomNavigationBar: Container(
-                height: alturaTela * 0.11,
-                color: PaletaCores.corAzul,
-                child: Column(
-                  children: [
-                    Container(
-                      width: larguraTela,
-                      height: 2,
-                      decoration: const BoxDecoration(color: Colors.white),
-                    ),
-                    const BarraNavegacao(
-                      tipoAcao: Constantes.tipoAcaoAdicao,
-                    ),
-                  ],
-                ))));
+            bottomNavigationBar: LayoutBuilder(
+              builder: (context, constraints) {
+                if (telaCarregamento) {
+                  return Container(
+                    height: alturaTela * 0.1,
+                    color: PaletaCores.corAzul,
+                  );
+                } else {
+                  return Container(
+                      height: alturaTela * 0.11,
+                      color: PaletaCores.corAzul,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: larguraTela,
+                            height: 2,
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
+                          ),
+                          const BarraNavegacao(
+                            tipoAcao: Constantes.tipoAcaoAdicao,
+                          ),
+                        ],
+                      ));
+                }
+              },
+            )));
   }
 }
