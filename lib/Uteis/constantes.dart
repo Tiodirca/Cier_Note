@@ -13,6 +13,7 @@ class Constantes {
   static const rotaTelaEditarAnotacao = "telaEditarAnotacao";
   static const rotaTelaFavorito = "telaFavorito";
   static const rotaTelaAnotacoesConcluidas = "telaAnotacoesConcluidas";
+  static const rotaTelaUsuario = "telaUsuario";
 
   // parametro para passar map de dados para tela de detalhes
   static const parametroTelaDetalhesAnotacao = "parametroDetalhesAnotacao";
@@ -62,4 +63,7 @@ class Constantes {
     SeletorCorModelo(cor: PaletaCores.corVerdeEscuro),
     SeletorCorModelo(cor: PaletaCores.corVerdeLima),
   ];
+
+  static const canalNotificacaoPadrao = "Padrão";
+
 }

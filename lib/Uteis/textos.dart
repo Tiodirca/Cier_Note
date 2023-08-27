@@ -14,6 +14,7 @@ class Textos {
   static String telaEditarAnotacao = "Editar anotação";
   static String telaFavoritos = "Favoritos e Notificações";
   static String telaAnotacoesConcluidas = "Concluidas";
+
   //descritivo telas
   static String descricaoTelaAnotacoesConcluidas =
       "Abaixo você pode ver todas as anotações que você já concluiu";
@@ -32,6 +33,9 @@ class Textos {
   static String tituloAlertaExclusao = "Confirmação de exclusão";
   static String descricaoAlertaExclusao =
       "Deseja realmente excluir está anotação ?";
+
+  static String tipoAlertaSucesso = "Sucesso";
+  static String tipoAlertaErro = "Erro";
 
   //mensagem de retorno caso nao defina um horario
   static String semHorarioDefinido = "Sem Horário definido";

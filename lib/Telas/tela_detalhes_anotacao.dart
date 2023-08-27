@@ -1,8 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:io';
+
 import 'package:ciernote/Modelo/anotacao.dart';
 import 'package:ciernote/Uteis/BancoDados/banco_dados.dart';
 import 'package:ciernote/Uteis/metodos_auxiliares.dart';
 import 'package:ciernote/Uteis/constantes.dart';
 import 'package:ciernote/Uteis/estilo.dart';
+import 'package:ciernote/Uteis/notificacoes.dart';
 import 'package:ciernote/Uteis/paleta_cores.dart';
 import 'package:ciernote/Uteis/textos.dart';
 import 'package:ciernote/Widgets/barra_navegacao.dart';
@@ -51,9 +56,6 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
                       Textos.notificacaoAtivada, Textos.notificacaoDesativada);
                   widget.anotacaoModelo.notificacaoAtiva =
                       statusAnotacaoNotificacao;
-                  print("Anotacao");
-                  print(widget.anotacaoModelo.notificacaoAtiva);
-                  print(statusAnotacaoNotificacao);
                   chamarAtualizarDados();
                 });
               } else if (iconData == Constantes.iconFavoritoAtivo ||
@@ -63,9 +65,6 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
                   verificarAtivacaoDesativacaoAcao(statusAnotacaoFavorito,
                       Textos.favoritoAtivada, Textos.favoritoDesativada);
                   widget.anotacaoModelo.favorito = statusAnotacaoFavorito;
-                  print("Favorito");
-                  print(widget.anotacaoModelo.favorito);
-                  print(statusAnotacaoFavorito);
                   chamarAtualizarDados();
                 });
               } else if (iconData == Constantes.iconExcluirDado) {
@@ -87,9 +86,18 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
   verificarAtivacaoDesativacaoAcao(
       bool acao, String msgAtivo, String msgDesativado) {
     if (acao) {
-      MetodosAuxiliares.exibirMensagem(msgAtivo, context);
+      if (Platform.isAndroid || Platform.isIOS) {
+        Notificacoes().exibirNotificao(
+            widget.anotacaoModelo, widget.anotacaoModelo.horario);
+      }
+      MetodosAuxiliares.exibirMensagens(
+          msgAtivo, Textos.tipoAlertaSucesso, context);
     } else {
-      MetodosAuxiliares.exibirMensagem(msgDesativado, context);
+      if (Platform.isAndroid || Platform.isIOS) {
+        Notificacoes().cancelarNotificacao(widget.anotacaoModelo.id);
+      }
+      MetodosAuxiliares.exibirMensagens(
+          msgDesativado, Textos.tipoAlertaSucesso, context);
     }
   }
 
@@ -100,10 +108,12 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
   chamarExcluirDado() async {
     bool retorno = await bancoDados.excluirDado(widget.anotacaoModelo.id);
     if (retorno) {
-      MetodosAuxiliares.exibirMensagem(Textos.msgSucessoExcluir, context);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.msgSucessoExcluir, Textos.tipoAlertaSucesso, context);
       Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
     } else {
-      MetodosAuxiliares.exibirMensagem(Textos.msgErroExcluir, context);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.msgErroExcluir, Textos.tipoAlertaErro, context);
     }
   }
 
@@ -192,16 +202,12 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
     );
   }
 
-  redirecionamentoTela(){
+  redirecionamentoTela() {
     if (widget.tipoTela == Constantes.rotaTelaInicial) {
-      Navigator.pushReplacementNamed(
-          context, Constantes.rotaTelaInicial);
-    } else if (widget.tipoTela ==
-        Constantes.rotaTelaFavorito) {
-      Navigator.pushReplacementNamed(
-          context, Constantes.rotaTelaFavorito);
-    } else if (widget.tipoTela ==
-        Constantes.rotaTelaAnotacoesConcluidas) {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+    } else if (widget.tipoTela == Constantes.rotaTelaFavorito) {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaFavorito);
+    } else if (widget.tipoTela == Constantes.rotaTelaAnotacoesConcluidas) {
       Navigator.pushReplacementNamed(
           context, Constantes.rotaTelaAnotacoesConcluidas);
     }

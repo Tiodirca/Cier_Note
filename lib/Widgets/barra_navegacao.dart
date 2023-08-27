@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:ciernote/Modelo/anotacao.dart';
 import 'package:ciernote/Uteis/BancoDados/banco_dados.dart';
 import 'package:ciernote/Uteis/metodos_auxiliares.dart';
@@ -15,7 +16,6 @@ class BarraNavegacao extends StatelessWidget {
   final String tipoAcao;
 
   //variavel usada para validar o formulario
-
   static AnotacaoModelo anotacaoModelo = AnotacaoModelo.vazia();
 
   Widget botao(IconData iconData, String tipoAcao, BuildContext context) =>
@@ -56,6 +56,8 @@ class BarraNavegacao extends StatelessWidget {
               } else if (tipoAcao == Constantes.rotaTelaAnotacoesConcluidas) {
                 Navigator.popAndPushNamed(
                     context, Constantes.rotaTelaAnotacoesConcluidas);
+              } else if (tipoAcao == Constantes.rotaTelaUsuario) {
+
               }
             }),
       );
@@ -89,10 +91,12 @@ class BarraNavegacao extends StatelessWidget {
 
   pegarValores(BuildContext context) {
     if (anotacaoModelo.corAnotacao == null) {
-      MetodosAuxiliares.exibirMensagem(Textos.msgErroSelecaoCor, context);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.msgErroSelecaoCor, Textos.tipoAlertaErro, context);
     } else if (anotacaoModelo.nomeAnotacao.isEmpty ||
         anotacaoModelo.conteudoAnotacao.isEmpty) {
-      MetodosAuxiliares.exibirMensagem(Textos.msgErroCamposVazios, context);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.msgErroCamposVazios, Textos.tipoAlertaErro, context);
     } else {
       if (anotacaoModelo.id == 0) {
         chamarAdicionarDados(context);
@@ -107,10 +111,12 @@ class BarraNavegacao extends StatelessWidget {
     BancoDados bancoDados = BancoDados();
     bool retorno = await bancoDados.atualizarDados(anotacaoModelo);
     if (retorno) {
-      MetodosAuxiliares.exibirMensagem(Textos.msgSucessoAtualizar, context);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.msgSucessoAtualizar, Textos.tipoAlertaSucesso, context);
       Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
     } else {
-      MetodosAuxiliares.exibirMensagem(Textos.msgErroAtualizar, context);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.msgErroAtualizar, Textos.tipoAlertaErro, context);
     }
   }
 
@@ -119,10 +125,12 @@ class BarraNavegacao extends StatelessWidget {
     BancoDados bancoDados = BancoDados();
     bool retorno = await bancoDados.inserirDados(anotacaoModelo);
     if (retorno) {
-      MetodosAuxiliares.exibirMensagem(Textos.msgSucessoAdicionar, context);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.msgSucessoAdicionar, Textos.tipoAlertaSucesso, context);
       Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
     } else {
-      MetodosAuxiliares.exibirMensagem(Textos.msgErroAdicionar, context);
+      MetodosAuxiliares.exibirMensagens(
+          Textos.msgErroAdicionar, Textos.tipoAlertaErro, context);
     }
   }
 
@@ -153,7 +161,7 @@ class BarraNavegacao extends StatelessWidget {
           botaoAcao(mudarIconeBtnAcao(tipoAcao), context),
           botao(Icons.favorite_outlined,
               Constantes.tipoAcaoFiltrarFavoritoNotificacao, context),
-          botao(Icons.person_outline, "", context)
+          botao(Icons.person_outline, Constantes.rotaTelaUsuario, context)
         ],
       ),
     );

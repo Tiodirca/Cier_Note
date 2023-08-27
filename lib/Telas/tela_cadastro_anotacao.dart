@@ -63,12 +63,6 @@ class _TelaCadastroAnotacaoState extends State<TelaCadastroAnotacao> {
                     : false || label == Textos.labelHorario
                         ? true
                         : false,
-                // validator: (value) {
-                //   if(value!.isEmpty){
-                //     return "fdsfsd";
-                //   }
-                //   return null;
-                // },
                 controller: controller,
                 onTapOutside: (event) {
                   pegarValores(controller, label);

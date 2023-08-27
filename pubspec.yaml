@@ -22,6 +22,12 @@ dependencies:
   sqflite_common_ffi_web: '>=0.1.0-dev.1'
   path_provider: ^2.0.15
   sqflite_common: ^2.5.0
+  #push elegante
+  elegant_notification: ^1.11.0
+  #notificacoes dispositivo
+  workmanager: ^0.5.1
+  provider:
+  flutter_local_notifications: ^9.7.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
