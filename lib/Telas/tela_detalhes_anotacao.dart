@@ -3,11 +3,12 @@
 import 'dart:io';
 
 import 'package:ciernote/Modelo/anotacao.dart';
+import 'package:ciernote/Modelo/notificacao.dart';
 import 'package:ciernote/Uteis/BancoDados/banco_dados.dart';
 import 'package:ciernote/Uteis/metodos_auxiliares.dart';
 import 'package:ciernote/Uteis/constantes.dart';
 import 'package:ciernote/Uteis/estilo.dart';
-import 'package:ciernote/Uteis/notificacoes.dart';
+import 'package:ciernote/Uteis/servico_notificacoes.dart';
 import 'package:ciernote/Uteis/paleta_cores.dart';
 import 'package:ciernote/Uteis/textos.dart';
 import 'package:ciernote/Widgets/barra_navegacao.dart';
@@ -87,18 +88,33 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
       bool acao, String msgAtivo, String msgDesativado) {
     if (acao) {
       if (Platform.isAndroid || Platform.isIOS) {
-        Notificacoes().exibirNotificao(
-            widget.anotacaoModelo, widget.anotacaoModelo.horario);
+        chamarNotificacao();
       }
       MetodosAuxiliares.exibirMensagens(
           msgAtivo, Textos.tipoAlertaSucesso, context);
     } else {
       if (Platform.isAndroid || Platform.isIOS) {
-        Notificacoes().cancelarNotificacao(widget.anotacaoModelo.id);
+        NotificacaoServico().cancelarNotificacao(widget.anotacaoModelo.id);
       }
       MetodosAuxiliares.exibirMensagens(
           msgDesativado, Textos.tipoAlertaSucesso, context);
     }
+  }
+
+  chamarNotificacao() {
+    Map dados = {};
+    dados[Constantes.parametroTipoTela] = widget.tipoTela;
+    dados[Constantes.parametroTelaDetalhesAnotacao] = widget.anotacaoModelo;
+    dados[Constantes.parametroBuildContext] = context;
+    NotificacaoModelo notificacao = NotificacaoModelo(
+        id: widget.anotacaoModelo.id,
+        nomeAnotacao: widget.anotacaoModelo.nomeAnotacao,
+        conteudoNotificacao: widget.anotacaoModelo.conteudoAnotacao,
+        data: widget.anotacaoModelo.data,
+        horario: widget.anotacaoModelo.horario,
+        payload: dados);
+    NotificacaoServico().chamarExibirNotificacao(
+        notificacao, widget.anotacaoModelo.horario, context);
   }
 
   chamarAtualizarDados() async {
@@ -108,6 +124,7 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
   chamarExcluirDado() async {
     bool retorno = await bancoDados.excluirDado(widget.anotacaoModelo.id);
     if (retorno) {
+      NotificacaoServico().cancelarNotificacao(widget.anotacaoModelo.id);
       MetodosAuxiliares.exibirMensagens(
           Textos.msgSucessoExcluir, Textos.tipoAlertaSucesso, context);
       Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);

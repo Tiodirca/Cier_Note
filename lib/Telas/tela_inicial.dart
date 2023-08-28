@@ -3,12 +3,14 @@ import 'package:ciernote/Modelo/anotacao.dart';
 import 'package:ciernote/Uteis/BancoDados/banco_dados.dart';
 import 'package:ciernote/Uteis/constantes.dart';
 import 'package:ciernote/Uteis/estilo.dart';
+import 'package:ciernote/Uteis/servico_notificacoes.dart';
 import 'package:ciernote/Uteis/paleta_cores.dart';
 import 'package:ciernote/Uteis/textos.dart';
 import 'package:ciernote/Widgets/barra_navegacao.dart';
 import 'package:ciernote/Widgets/listagem_anotacoes.dart';
 import 'package:ciernote/Widgets/tela_carregamento.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
@@ -31,6 +33,12 @@ class _TelaInicialState extends State<TelaInicial> {
     super.initState();
     chamarCriarTabela();
     chamarRealizarConsultaBancoDados();
+    verificarNotificacaoAtiva();
+  }
+  // metodo responsavel por verificar as notificacoes
+  verificarNotificacaoAtiva() async {
+    await Provider.of<NotificacaoServico>(context, listen: false)
+        .verificarNotificacoesAtivas();
   }
 
   // metodo para criar tabela caso

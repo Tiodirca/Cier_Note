@@ -18,6 +18,7 @@ class Constantes {
   // parametro para passar map de dados para tela de detalhes
   static const parametroTelaDetalhesAnotacao = "parametroDetalhesAnotacao";
   static const parametroTipoTela = "tipoTela";
+  static const parametroBuildContext = "context";
 
   // acoes dos botoes
   static const tipoAcaoAdicao = "adicionarAnotacao";

@@ -1,10 +1,24 @@
 import 'package:ciernote/Uteis/constantes.dart';
+import 'package:ciernote/Uteis/servico_notificacoes.dart';
 import 'package:ciernote/Uteis/rotas.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+        Provider<NotificacaoServico>(
+          create: (context) => NotificacaoServico(),
+        )
+    ],child: const MyApp(),
+  ));
+
 }
 
 class MyApp extends StatelessWidget {

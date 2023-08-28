@@ -1,16 +1,20 @@
-import 'package:ciernote/Modelo/anotacao.dart';
+import 'package:ciernote/Modelo/notificacao.dart';
 import 'package:ciernote/Uteis/constantes.dart';
 import 'package:ciernote/Uteis/textos.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class Notificacoes {
+class NotificacaoServico {
   late FlutterLocalNotificationsPlugin localNotificationsPlugin;
   TimeOfDay? hora = const TimeOfDay(hour: 19, minute: 00);
   DateTime data = DateTime(2022, 07, 02);
+  late BuildContext context;
+  late String tipoTela;
+  late NotificacaoModelo notificacaoGeral;
 
   Future<bool> iniciarServicoNotificacao() async {
     try {
@@ -58,46 +62,53 @@ class Notificacoes {
   // no click na notificacao
   clickNotificacao(String? payload) {
     if (payload != null && payload.isNotEmpty) {
-      print("Vazio sadassads Nulo");
+      print("Entrou Payload");
     } else {
       print("Vazio ou Nulo");
     }
   }
 
-  Future<void> exibirNotificao(
-      AnotacaoModelo anotacaoModelo, String tipoNotificacao) {
+  exibirNotificacao(NotificacaoModelo notificacao, String tipoNotificacao) async {
     iniciarServicoNotificacao();
+    notificacaoGeral = notificacao;
     if (tipoNotificacao == Textos.semHorarioDefinido) {
-      return localNotificationsPlugin.show(
-        anotacaoModelo.id,
-        anotacaoModelo.nomeAnotacao,
-        anotacaoModelo.conteudoAnotacao,
+      await localNotificationsPlugin.show(
+        notificacao.id,
+        notificacao.nomeAnotacao,
+        notificacao.conteudoNotificacao,
         definicoesCanaisTipoPlataforma(),
-        payload: "",
+        payload: "acao",
       );
     } else {
-      formatarDataHora(anotacaoModelo);
+      formatarDataHora();
       configTimeZone();
-      //pegando a diferenca entra o horario agendado
-      // e o horario do dispositivo
-      Duration diferencaHora = tz.TZDateTime.now(tz.local).difference(
-          DateTime(data.year, data.month, data.day, hora!.hour, hora!.minute));
-      // verificando se a variavel contem
-      // valor com sinal de negativo
-      if (diferencaHora.inSeconds.toString().contains("-")) {
-        diferencaHora = -(diferencaHora);
-      }
-      return localNotificationsPlugin.zonedSchedule(
-          anotacaoModelo.id,
-          anotacaoModelo.nomeAnotacao,
-          anotacaoModelo.conteudoAnotacao,
+      await localNotificationsPlugin.zonedSchedule(
+          notificacao.id,
+          notificacao.nomeAnotacao,
+          notificacao.conteudoNotificacao,
           tz.TZDateTime.now(tz.local)
-              .add(Duration(seconds: diferencaHora.inSeconds)),
+              .add(Duration(seconds: calcularDirencaHorario())),
           definicoesCanaisTipoPlataforma(),
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
-              UILocalNotificationDateInterpretation.absoluteTime,payload: "s");
+              UILocalNotificationDateInterpretation.absoluteTime,
+          payload: "acao");
     }
+  }
+
+  // metodo para calcular a diferenca
+  // entre o horario programadoe o horario atual do dispositivo
+  calcularDirencaHorario() {
+    //pegando a diferenca entra o horario agendado
+    // e o horario do dispositivo
+    Duration diferencaHora = tz.TZDateTime.now(tz.local).difference(
+        DateTime(data.year, data.month, data.day, hora!.hour, hora!.minute));
+    // verificando se a variavel contem
+    // valor com sinal de negativo
+    if (diferencaHora.inSeconds.toString().contains("-")) {
+      diferencaHora = -(diferencaHora);
+    }
+    return diferencaHora.inSeconds;
   }
 
   // future responsavel por
@@ -107,20 +118,39 @@ class Notificacoes {
     await localNotificationsPlugin.cancel(id);
   }
 
+  // metodo responsavel por chamar a exibicao da notificacao
+  chamarExibirNotificacao(
+      NotificacaoModelo notificacao, String tipoNotificacao, BuildContext context) {
+    // instaniando o provider passando a classe modelo com os parametros necessarios
+    Provider.of<NotificacaoServico>(context, listen: false)
+        .exibirNotificacao(notificacao, tipoNotificacao);
+  }
+
+  verificarNotificacoesAtivas() async {
+    iniciarServicoNotificacao();
+    final detalhes =
+        await localNotificationsPlugin.getNotificationAppLaunchDetails();
+    if (detalhes != null && detalhes.didNotificationLaunchApp) {
+      clickNotificacao(detalhes.payload);
+      print("Entrou detalhers");
+    }else{
+      print("Erros");
+    }
+  }
+
   // -------- Necessario para agendar a notificacao
-  formatarDataHora(AnotacaoModelo anotacaoModelo) {
+  formatarDataHora() {
     DateTime? converterHora;
     //variavel vai receber o valor da string e
     // converter para o formato de hora
-    converterHora = DateFormat("hh:mm").parse(anotacaoModelo.horario);
+    converterHora = DateFormat("hh:mm").parse(notificacaoGeral.horario);
     TimeOfDay horaFormatar =
         TimeOfDay(hour: converterHora.hour, minute: converterHora.minute);
     hora = horaFormatar;
-    data = DateFormat("dd/MM/yyyy", "pt_BR").parse(anotacaoModelo.data);
+    data = DateFormat("dd/MM/yyyy", "pt_BR").parse(notificacaoGeral.data);
   }
 
-  // future para configurar
-  // o time zone para pegar o
+  // future para configurar o time zone para pegar o
   // horario local do dispositivo
   Future<void> configTimeZone() async {
     tz.initializeTimeZones();
