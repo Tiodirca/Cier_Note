@@ -380,6 +380,7 @@ class _TelaFavoritoNotificacaoState extends State<TelaFavoritoNotificacao> {
                             ),
                             const BarraNavegacao(
                               tipoAcao: Constantes.tipoAcaoAdicao,
+                              tipoTela: "",
                             ),
                           ],
                         ));

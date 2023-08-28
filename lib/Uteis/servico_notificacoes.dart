@@ -68,7 +68,8 @@ class NotificacaoServico {
     }
   }
 
-  exibirNotificacao(NotificacaoModelo notificacao, String tipoNotificacao) async {
+  exibirNotificacao(
+      NotificacaoModelo notificacao, String tipoNotificacao) async {
     iniciarServicoNotificacao();
     notificacaoGeral = notificacao;
     if (tipoNotificacao == Textos.semHorarioDefinido) {
@@ -105,9 +106,12 @@ class NotificacaoServico {
         DateTime(data.year, data.month, data.day, hora!.hour, hora!.minute));
     // verificando se a variavel contem
     // valor com sinal de negativo
+
     if (diferencaHora.inSeconds.toString().contains("-")) {
       diferencaHora = -(diferencaHora);
     }
+    print(diferencaHora.inSeconds);
+    print(diferencaHora);
     return diferencaHora.inSeconds;
   }
 
@@ -118,9 +122,14 @@ class NotificacaoServico {
     await localNotificationsPlugin.cancel(id);
   }
 
+  Future<void> cancelarTudo() async {
+    iniciarServicoNotificacao();
+    await localNotificationsPlugin.cancelAll();
+  }
+
   // metodo responsavel por chamar a exibicao da notificacao
-  chamarExibirNotificacao(
-      NotificacaoModelo notificacao, String tipoNotificacao, BuildContext context) {
+  chamarExibirNotificacao(NotificacaoModelo notificacao, String tipoNotificacao,
+      BuildContext context) {
     // instaniando o provider passando a classe modelo com os parametros necessarios
     Provider.of<NotificacaoServico>(context, listen: false)
         .exibirNotificacao(notificacao, tipoNotificacao);
@@ -133,7 +142,7 @@ class NotificacaoServico {
     if (detalhes != null && detalhes.didNotificationLaunchApp) {
       clickNotificacao(detalhes.payload);
       print("Entrou detalhers");
-    }else{
+    } else {
       print("Erros");
     }
   }

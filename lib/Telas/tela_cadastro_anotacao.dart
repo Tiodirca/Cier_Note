@@ -18,7 +18,7 @@ class TelaCadastroAnotacao extends StatefulWidget {
 class _TelaCadastroAnotacaoState extends State<TelaCadastroAnotacao> {
   Estilo estilo = Estilo();
   DateTime data = DateTime.now();
-  late dynamic horario = const TimeOfDay(hour: 19, minute: 00);
+  late dynamic horario = TimeOfDay.now();
   dynamic horarioFormatado;
   dynamic corSelecionada = Colors.black;
   TextEditingController controllerNomeAnotacao =
@@ -42,7 +42,21 @@ class _TelaCadastroAnotacaoState extends State<TelaCadastroAnotacao> {
     BarraNavegacao.anotacaoModelo.favorito = false;
     BarraNavegacao.anotacaoModelo.notificacaoAtiva = false;
     BarraNavegacao.anotacaoModelo.statusAnotacao = false;
+    print("fsdfxxxxxxxxxxxxxs");
   }
+
+  List<SeletorCorModelo> itensCores = [
+    SeletorCorModelo(cor: PaletaCores.corCastanho),
+    SeletorCorModelo(cor: PaletaCores.corVerdeClaro),
+    SeletorCorModelo(cor: PaletaCores.corAzulCianoClaro),
+    SeletorCorModelo(cor: PaletaCores.corRosa),
+    SeletorCorModelo(cor: PaletaCores.corVerdeCiano),
+    SeletorCorModelo(cor: PaletaCores.corMarsala),
+    SeletorCorModelo(cor: PaletaCores.corAmareloDesaturado),
+    SeletorCorModelo(cor: PaletaCores.corLaranja),
+    SeletorCorModelo(cor: PaletaCores.corVerdeEscuro),
+    SeletorCorModelo(cor: PaletaCores.corVerdeLima),
+  ];
 
   Widget camposCadastro(
           double larguraTela, TextEditingController controller, String label) =>
@@ -189,7 +203,7 @@ class _TelaCadastroAnotacaoState extends State<TelaCadastroAnotacao> {
                     // setando novo valor para tal
                     // parametro permitindo assim
                     // evidenciar somente uma cor selecionada
-                    for (var itemLista in Constantes.itensCores) {
+                    for (var itemLista in itensCores) {
                       itemLista.corMarcada = false;
                     }
                   });
@@ -265,9 +279,12 @@ class _TelaCadastroAnotacaoState extends State<TelaCadastroAnotacao> {
                                   child: ListView(
                                     scrollDirection: Axis.horizontal,
                                     children: [
-                                      ...Constantes.itensCores
-                                          .map((e) => seletorCor(e))
-                                          .toList()
+                                      ...itensCores.map(
+                                        (e) {
+                                          print(e.corMarcada);
+                                          return seletorCor(e);
+                                        },
+                                      ).toList()
                                     ],
                                   ),
                                 )
@@ -289,6 +306,7 @@ class _TelaCadastroAnotacaoState extends State<TelaCadastroAnotacao> {
                         ),
                         const BarraNavegacao(
                           tipoAcao: Constantes.tipoAcaoSalvarAnotacao,
+                          tipoTela: "",
                         ),
                       ],
                     ))),

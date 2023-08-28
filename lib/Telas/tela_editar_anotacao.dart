@@ -9,9 +9,11 @@ import 'package:ciernote/Widgets/barra_navegacao.dart';
 import 'package:flutter/material.dart';
 
 class TelaEditarAnotacao extends StatefulWidget {
-  const TelaEditarAnotacao({super.key, required this.anotacaoModelo});
+  const TelaEditarAnotacao(
+      {super.key, required this.anotacaoModelo, required this.tipoTela});
 
   final AnotacaoModelo anotacaoModelo;
+  final String tipoTela;
 
   @override
   State<TelaEditarAnotacao> createState() => _TelaEditarAnotacaoState();
@@ -44,10 +46,8 @@ class _TelaEditarAnotacaoState extends State<TelaEditarAnotacao> {
 
   // recuperando a data e formatando ela para o formato correto
   recuperarData() {
-    data =
-        DateFormat("dd/MM/yyyy", "pt_BR").parse(widget.anotacaoModelo.data);
+    data = DateFormat("dd/MM/yyyy", "pt_BR").parse(widget.anotacaoModelo.data);
     controllerData.text = '${data.day}/${data.month}/${data.year}';
-
   }
 
   // recuperando a hora e formatando ela para o formato correto
@@ -55,28 +55,40 @@ class _TelaEditarAnotacaoState extends State<TelaEditarAnotacao> {
     if (widget.anotacaoModelo.horario != Textos.semHorarioDefinido) {
       DateTime? converterHora;
       converterHora = DateFormat("hh:mm").parse(widget.anotacaoModelo.horario);
-      horario = TimeOfDay(hour: converterHora.hour, minute: converterHora.minute);
+      horario =
+          TimeOfDay(hour: converterHora.hour, minute: converterHora.minute);
       formatarHora();
       controllerHora.text = horarioFormatado;
     } else {
       controllerHora.text = widget.anotacaoModelo.horario;
     }
-
   }
+
+  // lista com as cores para o usuario selecionar
+  List<SeletorCorModelo> itensCores = [
+    SeletorCorModelo(cor: PaletaCores.corCastanho),
+    SeletorCorModelo(cor: PaletaCores.corVerdeClaro),
+    SeletorCorModelo(cor: PaletaCores.corAzulCianoClaro),
+    SeletorCorModelo(cor: PaletaCores.corRosa),
+    SeletorCorModelo(cor: PaletaCores.corVerdeCiano),
+    SeletorCorModelo(cor: PaletaCores.corMarsala),
+    SeletorCorModelo(cor: PaletaCores.corAmareloDesaturado),
+    SeletorCorModelo(cor: PaletaCores.corLaranja),
+    SeletorCorModelo(cor: PaletaCores.corVerdeEscuro),
+    SeletorCorModelo(cor: PaletaCores.corVerdeLima),
+  ];
 
   //recuperando a cor selecionada pelo usuario na anotacao
   recuperarCorSelecionada() {
     // verificando qual item da lista de cores corresponde
     // a cor recuperada para marcar no seletor
-    for (var linha in Constantes.itensCores) {
+    for (var linha in itensCores) {
       if (linha.cor == widget.anotacaoModelo.corAnotacao) {
         linha.corMarcada = true;
         corSelecionada = linha.cor;
       }
     }
   }
-
-
 
   Widget camposCadastro(
           double larguraTela, TextEditingController controller, String label) =>
@@ -221,7 +233,7 @@ class _TelaEditarAnotacaoState extends State<TelaEditarAnotacao> {
                     // setando novo valor para tal
                     // parametro permitindo assim
                     // evidenciar somente uma cor selecionada
-                    for (var itemLista in Constantes.itensCores) {
+                    for (var itemLista in itensCores) {
                       itemLista.corMarcada = false;
                     }
                   });
@@ -252,6 +264,7 @@ class _TelaEditarAnotacaoState extends State<TelaEditarAnotacao> {
                   leading: IconButton(
                     onPressed: () {
                       Map dados = {};
+                      dados[Constantes.parametroTipoTela] = widget.tipoTela;
                       dados[Constantes.parametroTelaDetalhesAnotacao] =
                           widget.anotacaoModelo;
                       Navigator.pushReplacementNamed(
@@ -291,7 +304,7 @@ class _TelaEditarAnotacaoState extends State<TelaEditarAnotacao> {
                                 child: ListView(
                                   scrollDirection: Axis.horizontal,
                                   children: [
-                                    ...Constantes.itensCores
+                                    ...itensCores
                                         .map((e) => seletorCor(e))
                                         .toList()
                                   ],
@@ -315,6 +328,7 @@ class _TelaEditarAnotacaoState extends State<TelaEditarAnotacao> {
                       ),
                       const BarraNavegacao(
                         tipoAcao: Constantes.tipoAcaoSalvarAnotacao,
+                        tipoTela: "",
                       ),
                     ],
                   ))),

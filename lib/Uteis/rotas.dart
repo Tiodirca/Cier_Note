@@ -36,6 +36,7 @@ class Rotas {
         if (argumentos is Map) {
           return MaterialPageRoute(
               builder: (_) => TelaEditarAnotacao(
+                  tipoTela: argumentos[Constantes.parametroTipoTela],
                   anotacaoModelo:
                       argumentos[Constantes.parametroTelaDetalhesAnotacao]));
         } else {

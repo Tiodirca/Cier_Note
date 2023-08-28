@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ciernote/Uteis/consultas.dart';
 import 'package:ciernote/Modelo/anotacao.dart';
 import 'package:ciernote/Uteis/BancoDados/banco_dados.dart';
@@ -33,8 +35,12 @@ class _TelaInicialState extends State<TelaInicial> {
     super.initState();
     chamarCriarTabela();
     chamarRealizarConsultaBancoDados();
-    verificarNotificacaoAtiva();
+
+    if (Platform.isAndroid || Platform.isIOS) {
+      verificarNotificacaoAtiva();
+    }
   }
+
   // metodo responsavel por verificar as notificacoes
   verificarNotificacaoAtiva() async {
     await Provider.of<NotificacaoServico>(context, listen: false)
@@ -293,6 +299,7 @@ class _TelaInicialState extends State<TelaInicial> {
                           ),
                           const BarraNavegacao(
                             tipoAcao: Constantes.tipoAcaoAdicao,
+                            tipoTela: "",
                           ),
                         ],
                       ));

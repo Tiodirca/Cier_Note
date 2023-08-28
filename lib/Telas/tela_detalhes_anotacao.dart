@@ -19,7 +19,7 @@ class TelaDetalhesAnotacao extends StatefulWidget {
       {super.key, required this.anotacaoModelo, required this.tipoTela});
 
   final AnotacaoModelo anotacaoModelo;
-  final tipoTela;
+  final String tipoTela;
 
   @override
   State<TelaDetalhesAnotacao> createState() => _TelaDetalhesAnotacaoState();
@@ -221,11 +221,11 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
 
   redirecionamentoTela() {
     if (widget.tipoTela == Constantes.rotaTelaInicial) {
-      Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+      Navigator.popAndPushNamed(context, Constantes.rotaTelaInicial);
     } else if (widget.tipoTela == Constantes.rotaTelaFavorito) {
-      Navigator.pushReplacementNamed(context, Constantes.rotaTelaFavorito);
+      Navigator.popAndPushNamed(context, Constantes.rotaTelaFavorito);
     } else if (widget.tipoTela == Constantes.rotaTelaAnotacoesConcluidas) {
-      Navigator.pushReplacementNamed(
+      Navigator.popAndPushNamed(
           context, Constantes.rotaTelaAnotacoesConcluidas);
     }
   }
@@ -316,8 +316,9 @@ class _TelaDetalhesAnotacaoState extends State<TelaDetalhesAnotacao> {
                         height: 2,
                         decoration: const BoxDecoration(color: Colors.white),
                       ),
-                      const BarraNavegacao(
+                      BarraNavegacao(
                         tipoAcao: Constantes.tipoAcaoEditarAnotacao,
+                        tipoTela: widget.tipoTela,
                       ),
                     ],
                   ))),

@@ -309,6 +309,7 @@ class _TelaAnotacoesConcluidasState extends State<TelaAnotacoesConcluidas> {
                             ),
                             const BarraNavegacao(
                               tipoAcao: Constantes.tipoAcaoAdicao,
+                              tipoTela: "",
                             ),
                           ],
                         ));

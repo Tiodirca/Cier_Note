@@ -51,20 +51,6 @@ class Constantes {
   static const bancoFavorito = "favorito";
   static const bancoNotificacaoAtiva = "notificacaoAtiva";
 
-  // lista com as cores para o usuario selecionar
-  static final List<SeletorCorModelo> itensCores = [
-    SeletorCorModelo(cor: PaletaCores.corCastanho),
-    SeletorCorModelo(cor: PaletaCores.corVerdeClaro),
-    SeletorCorModelo(cor: PaletaCores.corAzulCianoClaro),
-    SeletorCorModelo(cor: PaletaCores.corRosa),
-    SeletorCorModelo(cor: PaletaCores.corVerdeCiano),
-    SeletorCorModelo(cor: PaletaCores.corMarsala),
-    SeletorCorModelo(cor: PaletaCores.corAmareloDesaturado),
-    SeletorCorModelo(cor: PaletaCores.corLaranja),
-    SeletorCorModelo(cor: PaletaCores.corVerdeEscuro),
-    SeletorCorModelo(cor: PaletaCores.corVerdeLima),
-  ];
-
   static const canalNotificacaoPadrao = "Padrão";
 
 }

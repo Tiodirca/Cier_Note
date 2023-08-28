@@ -11,9 +11,11 @@ class BarraNavegacao extends StatelessWidget {
   const BarraNavegacao({
     super.key,
     required this.tipoAcao,
+    required this.tipoTela,
   });
 
   final String tipoAcao;
+  final String tipoTela;
 
   //variavel usada para validar o formulario
   static AnotacaoModelo anotacaoModelo = AnotacaoModelo.vazia();
@@ -56,9 +58,7 @@ class BarraNavegacao extends StatelessWidget {
               } else if (tipoAcao == Constantes.rotaTelaAnotacoesConcluidas) {
                 Navigator.popAndPushNamed(
                     context, Constantes.rotaTelaAnotacoesConcluidas);
-              } else if (tipoAcao == Constantes.rotaTelaUsuario) {
-
-              }
+              } else if (tipoAcao == Constantes.rotaTelaUsuario) {}
             }),
       );
 
@@ -76,13 +76,14 @@ class BarraNavegacao extends StatelessWidget {
               if (tipoAcao == Constantes.tipoAcaoSalvarAnotacao) {
                 pegarValores(context);
               } else if (tipoAcao == Constantes.tipoAcaoAdicao) {
-                Navigator.pushReplacementNamed(
+                Navigator.popAndPushNamed(
                     context, Constantes.rotaTelaCadastroAnotacao);
               } else {
                 Map dados = {};
                 dados[Constantes.parametroTelaDetalhesAnotacao] =
                     anotacaoModelo;
-                Navigator.pushReplacementNamed(
+                dados[Constantes.parametroTipoTela] = tipoTela;
+                    Navigator.popAndPushNamed(
                     context, Constantes.rotaTelaEditarAnotacao,
                     arguments: dados);
               }
